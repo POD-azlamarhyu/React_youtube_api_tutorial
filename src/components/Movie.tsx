@@ -64,7 +64,8 @@ const Movie = () => {
                                             allowFullScreen>
                                         </iframe>
                                     </figure>
-                                )}
+                                )
+                        }
                     </div>
                 </div>
             </div>
