@@ -5,6 +5,7 @@ var Strings_1 = require("./Strings");
 var Movie = function () {
     var _a = react_1.useState(""), videoId = _a[0], setVideoID = _a[1];
     var _b = react_1.useState(""), keyword = _b[0], setKeyword = _b[1];
+    var _c = react_1.useState(true), loding = _c[0], setLoding = _c[1];
     var handleChenge = function (event) {
         setKeyword(event.target.value);
         console.log(keyword);
@@ -22,6 +23,7 @@ var Movie = function () {
         fetch(Strings_1.YOUTUBE_URL + qs)
             .then(function (res) { return res.json(); })
             .then(function (data) {
+            setLoding(false);
             console.log("get success!");
             setVideoID(data.items[0].id.videoId);
             console.log(videoId);
@@ -36,8 +38,8 @@ var Movie = function () {
             react_1["default"].createElement("input", { className: "button is-link", type: "submit", value: "\u691C\u7D22", onClick: getYoutubeMovie })),
         react_1["default"].createElement("div", { className: "columns m-3" },
             react_1["default"].createElement("div", { className: "column is-four-fifths is-offset-1" },
-                react_1["default"].createElement("div", { className: "card" },
-                    react_1["default"].createElement("figure", { className: "card-image image is-16by9" },
-                        react_1["default"].createElement("iframe", { id: "player", src: "https://www.youtube.com/embed/" + videoId, className: "has-ratio", frameBorder: "0", allowFullScreen: true })))))));
+                react_1["default"].createElement("div", { className: "card" }, loding ? (react_1["default"].createElement("div", { className: "" },
+                    react_1["default"].createElement("p", { className: "title " }, "Movie Loding...."))) : (react_1["default"].createElement("figure", { className: "card-image image is-16by9" },
+                    react_1["default"].createElement("iframe", { id: "player", src: "https://www.youtube.com/embed/" + videoId, className: "has-ratio", frameBorder: "0", allowFullScreen: true }))))))));
 };
 exports["default"] = Movie;

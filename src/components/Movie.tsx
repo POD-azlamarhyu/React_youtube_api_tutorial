@@ -5,6 +5,7 @@ const Movie = () => {
 
     const [videoId,setVideoID] = useState("");
     const [keyword,setKeyword] = useState("");
+    const [loding,setLoding] = useState(true);
 
     const handleChenge = (event:any) =>{
         setKeyword(event.target.value);
@@ -26,6 +27,7 @@ const Movie = () => {
         .then((res)=>res.json())
         .then(
             (data)=>{
+                setLoding(false);
                 console.log("get success!");
                 setVideoID(data.items[0].id.videoId);
                 console.log(videoId);
@@ -48,15 +50,21 @@ const Movie = () => {
 
                 <div className="column is-four-fifths is-offset-1">
                     <div className="card">
-                        <figure className="card-image image is-16by9">
-                            <iframe 
-                                    id="player"
-                                    src={"https://www.youtube.com/embed/"+videoId}
-                                    className="has-ratio"
-                                    frameBorder="0"
-                                    allowFullScreen>
-                            </iframe>
-                        </figure>
+                        {loding ? (
+                                    <div className="">
+                                        <p className="title ">Movie Loding....</p>
+                                    </div>
+                                ):(
+                                    <figure className="card-image image is-16by9">
+                                        <iframe 
+                                            id="player"
+                                            src={"https://www.youtube.com/embed/"+videoId}
+                                            className="has-ratio"
+                                            frameBorder="0"
+                                            allowFullScreen>
+                                        </iframe>
+                                    </figure>
+                                )}
                     </div>
                 </div>
             </div>
