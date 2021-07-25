@@ -1,11 +1,19 @@
-import React,{useState,useEffect} from 'react';
-import {API_KEY,YOUTUBE_URL} from './Strings';
+import React,{useState} from 'react';
+import {API_KEY} from './Strings';
+import {fetchVideos} from './API';
+import Load from './Load';
+import VideoPlay from './VideoPlay';
+import VideoList from './VideoList';
+
+
 
 const Movie = () => {
 
-    const [videoId,setVideoID] = useState("");
+    const [datas,setDatas] = useState<any[]>([]);
+    const [videos,setVideos] = useState<string[]>([]);
     const [keyword,setKeyword] = useState("");
     const [loding,setLoding] = useState(true);
+    let x1:number = 1,y1:number=20;
 
     const handleChenge = (event:any) =>{
         setKeyword(event.target.value);
@@ -18,25 +26,31 @@ const Movie = () => {
             key:API_KEY,
             q:keyword,
             type:"video",
-            maxResults:"10",
+            maxResults:"40",
             order:"viewCount",
         };
         const qs = new URLSearchParams(param);
-    
-        fetch(YOUTUBE_URL+qs)
-        .then((res)=>res.json())
-        .then(
-            (data)=>{
-                setLoding(false);
-                console.log("get success!");
-                setVideoID(data.items[0].id.videoId);
-                console.log(videoId);
-            },
-            (error)=>{
-                console.error(error);
-            }
-        )
+
+        fetchVideos(qs).then(data　=>{
+            setLoding(false);
+            setDatas(data.items);
+        })
+
+        datas.map(data　=>　{
+            // console.log(data);
+            setVideos([...videos,data.id.videoId]);
+            console.log(videos);
+        })
     }
+
+    // useEffect(() => {
+    //     datas.map(data　=>　{
+    //         // console.log(data);
+    //         setVideos([...videos,data.id.videoId]);
+    //         console.log(videos);
+    //     })
+    // }, )
+
 
     return (
         <div>
@@ -47,27 +61,19 @@ const Movie = () => {
                 <input className="button is-link" type="submit" value="検索" onClick={getYoutubeMovie} />
             </form>
             <div className="columns m-3">
-
                 <div className="column is-four-fifths is-offset-1">
                     <div className="card">
                         {loding ? (
-                                    <div className="">
-                                        <p className="title ">Movie Loding....</p>
-                                    </div>
+                                    <Load />
                                 ):(
-                                    <figure className="card-image image is-16by9">
-                                        <iframe 
-                                            id="player"
-                                            src={"https://www.youtube.com/embed/"+videoId}
-                                            className="has-ratio"
-                                            frameBorder="0"
-                                            allowFullScreen>
-                                        </iframe>
-                                    </figure>
+                                    <VideoPlay id={videos[0]}/>
                                 )
                         }
                     </div>
                 </div>
+                {videos.map((id)=>{
+                    <VideoList id={id} x={x1} y={y1} />
+                })}
             </div>
         </div>
     )
