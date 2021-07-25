@@ -1,13 +1,19 @@
-import React,{useEffect,useState} from 'react';
-import {API_KEY,YOUTUBE_URL} from './Strings';
+import {YOUTUBE_URL} from './Strings';
 
-const API = () => {
-    
-    return (
-        <div>
-            
-        </div>
-    )
-};
+interface QS{
+    key:string,
+    q:string,
+    type:string,
+    maxResults:string,
+    order:string
+}
 
-export default API;
+export const fetchVideos = async (qs:any) => {
+    try{
+        const response = await fetch(YOUTUBE_URL+qs);
+        const data = await response.json();
+        return data.items;
+    }catch(e){
+        throw(e);
+    }
+}
